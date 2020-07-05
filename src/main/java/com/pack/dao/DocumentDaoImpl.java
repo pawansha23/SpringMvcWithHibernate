@@ -11,10 +11,10 @@ public class DocumentDaoImpl implements DocumentDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	@Override
-	public void addPdf(Documents doc) {
-		sessionFactory.getCurrentSession().save(doc);
+	public void addPdf(Documents documents) {
+		sessionFactory.getCurrentSession().save(documents);
 	}
 
 }

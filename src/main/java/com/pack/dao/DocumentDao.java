@@ -4,5 +4,5 @@ import com.pack.model.Documents;
 
 public interface DocumentDao {
 
-	public void addPdf(Documents doc);
+	public void addPdf(Documents documents);
 }

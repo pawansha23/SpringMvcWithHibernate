@@ -1,7 +1,10 @@
 package com.pack.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -14,6 +17,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.pack.dao.DocumentDao;
+import com.pack.model.Documents;
 import com.pack.vo.DocumentVO;
 
 @Service
@@ -21,15 +25,17 @@ public class DocumentServiceImpl implements DocumentService {
 
 	@Autowired
 	private DocumentDao docDao;
-	
+
 	@Transactional
 	public void addPdf(DocumentVO documentVO) {
 		Document document = new Document();
 		byte[] targetDoc = null;
-		String path = "/Users/jedahmadia/Desktop/testpath/" + documentVO.getDocName() + ".pdf";
+		String path = "C:\\Users\\admin\\OneDrive\\Desktop\\New folder\\" + documentVO.getDocName() + ".pdf";
+		File file = null;
+		FileInputStream fis = null;
+		Documents documents = new Documents();
 		try {
-			PdfWriter pdfWriter = PdfWriter.getInstance(document,
-					new FileOutputStream(path));
+			PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(path));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -38,23 +44,25 @@ public class DocumentServiceImpl implements DocumentService {
 
 			document.add(paragraph);
 			document.close();
-			
 
-			File file = new File(path);
+			file = new File(path);
 			PDDocument pdDocument = PDDocument.load(file);
-			// Instantiate PDFTextStripper class
 			PDFTextStripper pdfStripper = new PDFTextStripper();
-			// Retrieving text from PDF document
 			String text = pdfStripper.getText(pdDocument);
 			System.out.println(text);
-			// Closing the document
 			pdDocument.close();
 
+			byte[] bArray = new byte[(int) file.length()];
+			fis = new FileInputStream(file);
+			fis.read(bArray);
+			fis.close();
+
+			documents.setDoc(new SerialBlob(bArray));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//docDao.addPdf(doc);
+
+		docDao.addPdf(documents);
 	}
 
 }

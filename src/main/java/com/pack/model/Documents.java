@@ -16,10 +16,10 @@ public class Documents {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "docId")
-	int docId;
-	
+	private int docId;
+
 	@Column(name = "doc")
-	Blob doc;
+	private Blob doc;
 
 	public int getDocId() {
 		return docId;
@@ -36,4 +36,10 @@ public class Documents {
 	public void setDoc(Blob doc) {
 		this.doc = doc;
 	}
+
+	@Override
+	public String toString() {
+		return "Documents [docId=" + docId + ", doc=" + doc + "]";
+	}
+
 }
